@@ -6,11 +6,7 @@ export const fetchPosts = createAsyncThunk(
   async ({ subreddit = 'popular', sort = 'hot' }) => {
     const url = `https://www.reddit.com/r/${subreddit}/${sort}.json?raw_json=1`;
 // Reddit's API requires a User-Agent header, so we include it in the fetch request
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; reddit-client/1.0; +https://example.com)',
-      },
-    });
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch posts: ${response.status}`);
     }
