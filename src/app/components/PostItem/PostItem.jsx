@@ -14,9 +14,11 @@ const fullImage = post.image
 
 const isImagePost =
   post.postHint === 'image' &&
-  (fullImage?.endsWith('.jpg') ||
-    fullImage?.endsWith('.png') ||
-    fullImage?.endsWith('.jpeg'));
+  (fullImage && (
+  fullImage.endsWith('.jpg') ||
+  fullImage.endsWith('.png') ||
+  fullImage.endsWith('.jpeg')
+));
   return (
     
     <div className="post-item" style={styles.container}>
@@ -26,17 +28,19 @@ const isImagePost =
       >
         <h3 style={styles.title}>{post.title}</h3>
 
-        {/* ⭐ IMAGE POST */}
+        {/* IMAGE POST */}
         {isImagePost && (
           <img
             src={fullImage || preview}
-            alt={post.title}
+            alt={post.title || 'post image'}
             style={styles.image}
           />
         )}
 
-        {/* ⭐ THUMBNAIL (if not an image post) */}
-        {!isImagePost && post.thumbnail && post.thumbnail.startsWith('http') && (
+        {/* THUMBNAIL (if not an image post) */}
+        {!isImagePost && 
+        typeof post.thumbnail === 'string' && 
+        post.thumbnail.startsWith('http') && (
           <img
             src={post.thumbnail}
             alt="thumbnail"
@@ -44,7 +48,7 @@ const isImagePost =
           />
         )}
 
-        {/* ⭐ BASIC POST INFO */}
+        {/* BASIC POST INFO */}
         <div style={styles.meta}>
           <span>Posted by u/{post.author}</span>
           <span>•</span>
