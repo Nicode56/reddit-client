@@ -5,7 +5,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import postsReducer from './features/posts/postsSlice';
 import filtersReducer from './features/filters/filtersSlice';
 import commentsReducer from './features/comments/commentsSlice';
-import { MemoryRouter } from 'react-router-dom';
 
 test('renders homepage', () => {
   const store = configureStore({
@@ -18,9 +17,7 @@ test('renders homepage', () => {
 
   render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={['/']}>
-        <App />
-      </MemoryRouter>
+      <App />
     </Provider>
   );
 

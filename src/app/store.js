@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import postsReducer from '../features/posts/postsSlice';
-import filtersReducer from '../features/Filters/filtersSlice';
+import filtersReducer from '../features/filters/filtersSlice';
 import commentsReducer from '../features/comments/commentsSlice';
 
 export const store = configureStore({

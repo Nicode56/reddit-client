@@ -1,8 +1,9 @@
 import { fetchPosts } from './postsSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import postsReducer from './postsSlice';
+import { vi } from 'vitest';
 
-global.fetch = jest.fn(() =>
+global.fetch = vi.fn(() =>
   Promise.resolve({
     json: () =>
       Promise.resolve({

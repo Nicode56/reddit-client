@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSubreddit, setSort } from '../../../features/Filters/filtersSlice';
+import { setSubreddit, setSort } from '../../../features/filters/filtersSlice';
 import { fetchPosts } from '../../../features/posts/postsSlice';
 
 function Filters() {

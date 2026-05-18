@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSearchTerm } from '../../../features/Filters/filtersSlice';
+import { setSearchTerm } from '../../../features/filters/filtersSlice';
 import { fetchPosts } from '../../../features/posts/postsSlice';
 
 function SearchBar() {
