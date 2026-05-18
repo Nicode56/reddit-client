@@ -48,15 +48,6 @@ export default async function handler(req, res) {
       attempts: tried,
       snippet,
     });
-
-    // If we reach here both attempts failed — return diagnostic info
-    const snippet = body ? body.slice(0, 2000) : '';
-    res.setHeader('Content-Type', 'application/json');
-    res.status(502).json({
-      error: 'Upstream fetch failed',
-      attempts: tried,
-      snippet,
-    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
