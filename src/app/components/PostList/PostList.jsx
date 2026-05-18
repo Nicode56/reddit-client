@@ -11,8 +11,8 @@ function PostList() {
   const { subreddit, sort, searchTerm } = useSelector((state) => state.filters);
 
 useEffect(() => {
-  dispatch(fetchPosts({ subreddit, sort, term: searchTerm }));
-}, [subreddit, sort, searchTerm, dispatch]); 
+  dispatch(fetchPosts({ subreddit, sort }));
+}, [subreddit, sort, dispatch]); 
 
   //* Fetch posts on initial load
   

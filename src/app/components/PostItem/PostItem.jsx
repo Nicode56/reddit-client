@@ -1,14 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './PostItem.css'; // optional 
+//import './PostItem.css'; // optional 
 
 function PostItem({ post }) {
 
-  const preview = post.previewImage?.replace(/&amp;/g, '&'); // unescape HTML entities
-  const fullImage = post.image?.replace(/&amp;/g, '&');
+  const preview = post.previewImage
+  ? post.previewImage.replace(/&amp;/g, '&')
+  : null;
 
-  const isImagePost =
-    post.postHint === (fullImage && (fillImage.endsWith('.jpg') || fullImage.endsWith('.png') || fullImage.endsWith('.jpeg')));
+const fullImage = post.image
+  ? post.image.replace(/&amp;/g, '&')
+  : null;
+
+const isImagePost =
+  post.postHint === 'image' &&
+  (fullImage?.endsWith('.jpg') ||
+    fullImage?.endsWith('.png') ||
+    fullImage?.endsWith('.jpeg'));
   return (
     
     <div className="post-item" style={styles.container}>
