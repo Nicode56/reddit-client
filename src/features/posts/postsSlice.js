@@ -4,9 +4,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
-    const url = `https://www.reddit.com/r/${subreddit}/${sort}.json`;
+    const url = `https://www.reddit.com/r/${subreddit}/${sort}/.json`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; reddit-client/1.0; +https://example.com)',
+      },
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch posts: ${response.status}`);
     }
