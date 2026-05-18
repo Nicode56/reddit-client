@@ -6,8 +6,6 @@ import PostItem from '../PostItem/PostItem';
 function PostList() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.items);
-  const status = useSelector((state) => state.posts.status);
-  const error = useSelector((state) => state.posts.error);
   const { subreddit, sort, searchTerm } = useSelector((state) => state.filters);
 
 useEffect(() => {

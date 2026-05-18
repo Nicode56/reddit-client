@@ -5,7 +5,7 @@ import Filters from '../../components/Filters/Filters';
 
 function HomePage() {
   return (
-    <main>
+    <main className="container">
       <h1>Reddit Client</h1>
       <SearchBar />
       <Filters /> 
