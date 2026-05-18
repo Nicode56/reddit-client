@@ -11,6 +11,7 @@ function PostList() {
   const { subreddit, sort, searchTerm } = useSelector((state) => state.filters);
 
 useEffect(() => {
+  if (!subreddit || !sort) return; // don't fetch if subreddit or sort is missing
   dispatch(fetchPosts({ subreddit, sort }));
 }, [subreddit, sort, dispatch]); 
 
