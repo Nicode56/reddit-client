@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchComments } from '../../../features/comments/commentsSlice';
+import Comment from '../../components/Comment/Comment';
+
 
 function PostPage() {
   const { subreddit, postId } = useParams();
@@ -34,10 +36,7 @@ function PostPage() {
       {status === 'failed' && <p>Error loading comments.</p>}
 
       {comments.map((c) => (
-        <div key={c.id} style={{ marginBottom: '1rem' }}>
-          <strong>{c.author}</strong>
-          <p>{c.body}</p>
-        </div>
+        <Comment key={c.id} comment={c} />
       ))}
     </main>
   );

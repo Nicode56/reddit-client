@@ -4,3 +4,16 @@
   border-bottom: 1px solid var(--color-border);
   margin-bottom: var(--space-5);
 }
+
+.header h1 {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+}
+
+p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  background-color: dark rgb(63, 61, 61);
+  padding: var(--space-2);
+}

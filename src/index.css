@@ -76,6 +76,8 @@ input:focus {
   border-color: var(--color-accent);
 }
 
+
+
 @media (max-width: 600px) {
   .container {
     padding: var(--space-2);

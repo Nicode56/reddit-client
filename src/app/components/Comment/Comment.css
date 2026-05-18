@@ -1,0 +1,21 @@
+.comment {
+  background: var(--color-surface);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.comment-author {
+  font-weight: bold;
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.comment-body {
+  color: var(--color-text);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
