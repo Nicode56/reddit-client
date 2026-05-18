@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import postsHandler from '../api/posts.js';
 import commentsHandler from '../api/comments.js';

@@ -2,9 +2,18 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
-## Available Scripts
+## Supported backend routing
 
-In the project directory, you can run:
+This app can route Reddit requests through a supported Devvit backend path instead of requiring local Reddit OAuth credentials.
+
+- Set `VITE_DEVVIT_URL` to your Devvit HTTP host, for example:
+
+```env
+VITE_DEVVIT_URL=https://your-devvit-host
+```
+
+- When `VITE_DEVVIT_URL` is set, the frontend calls `${VITE_DEVVIT_URL}/posts` and `${VITE_DEVVIT_URL}/comments`.
+- If `VITE_DEVVIT_URL` is not set, the app falls back to the local `/api/posts` and `/api/comments` proxy.
 
 ### `npm start`
 
