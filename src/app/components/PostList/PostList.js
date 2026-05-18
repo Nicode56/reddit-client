@@ -1,37 +1,21 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts } from '../../features/posts/postsSlice';
+import { fetchPosts } from '../../../features/posts/postsSlice';
 import PostItem from '../PostItem/PostItem';
 
 function PostList() {
   const dispatch = useDispatch();
-
   const posts = useSelector((state) => state.posts.items);
   const status = useSelector((state) => state.posts.status);
   const error = useSelector((state) => state.posts.error);
+  const { subreddit, sort, searchTerm } = useSelector((state) => state.filters);
 
-  // Fetch posts on initial load
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchPosts({ subreddit: 'popular', sort: 'hot' }));
-    }
-  }, [status, dispatch]);
+useEffect(() => {
+  dispatch(fetchPosts({ subreddit, sort, term: searchTerm }));
+}, [subreddit, sort, searchTerm, dispatch]); 
 
-  if (status === 'loading') {
-    return <p>Loading posts…</p>;
-  }
-
-  if (status === 'failed') {
-    return (
-      <div>
-        <p>Error: {error}</p>
-        <button onClick={() => dispatch(fetchPosts({ subreddit: 'popular', sort: 'hot' }))}>
-          Retry
-        </button>
-      </div>
-    );
-  }
-
+  //* Fetch posts on initial load
+  
   return (
     <div className="post-list">
       {posts.map((post) => (

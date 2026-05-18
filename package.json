@@ -6,6 +6,7 @@
     "cra-template-redux": "2.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-redux": "^9.3.0",
     "react-scripts": "5.0.1"
   },
   "scripts": {

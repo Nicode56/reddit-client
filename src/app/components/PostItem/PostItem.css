@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(243, 199, 137);
+    margin: 0;
+    padding: 20px;
+}
+.post-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+.post-item h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+.post-item p {
+    margin: 0;
+    color: #555;
+}
+.post-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+.post-item a:hover {
+    text-decoration: underline;
+}
