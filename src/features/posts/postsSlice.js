@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
-    const url = `https://www.reddit.com/r/${subreddit}/${sort}`;
+    const url = `https://api.reddit.com/r/${subreddit}/${sort}`;
 
     const response = await fetch(url, {
       headers: {
