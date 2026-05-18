@@ -17,12 +17,15 @@ export default async function handler(req, res) {
       'Referer': 'https://www.reddit.com/'
     };
 
+    // try www first
     let response = await fetch(url, { headers });
+    let tried = [{ url, status: response.status }];
 
-    // Retry with old.reddit.com on 403 (bot blocking)
-    if (response.status === 403) {
+    // If blocked, try old.reddit.com
+    if (!response.ok) {
       const fallback = url.replace('www.reddit.com', 'old.reddit.com');
       const fallbackResp = await fetch(fallback, { headers });
+      tried.push({ url: fallback, status: fallbackResp.status });
       if (fallbackResp.ok) {
         const body = await fallbackResp.text();
         res.setHeader('Content-Type', 'application/json');
@@ -33,9 +36,21 @@ export default async function handler(req, res) {
     }
 
     const body = await response.text();
+    if (response.ok) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
+      res.status(response.status).send(body);
+      return;
+    }
+
+    // If we reach here both attempts failed — return diagnostic info
+    const snippet = body ? body.slice(0, 2000) : '';
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
-    res.status(response.status).send(body);
+    res.status(502).json({
+      error: 'Upstream fetch failed',
+      attempts: tried,
+      snippet,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
