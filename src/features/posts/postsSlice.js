@@ -4,8 +4,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
-    const url = `https://www.reddit.com/r/${subreddit}/${sort}.json`;
+    const url = `/api/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`;
     const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText} (${url})`);
+    }
     const json = await response.json();
 
     // Normalize the data into a clean array of posts
