@@ -5,7 +5,7 @@ export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
     const url = `https://api.reddit.com/r/${subreddit}/${sort}`;
-
+// Reddit's API requires a User-Agent header, so we include it in the fetch request
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; reddit-client/1.0; +https://example.com)',
