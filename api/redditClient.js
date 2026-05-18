@@ -1,9 +1,17 @@
-const USER_AGENT = 'reddit-client/1.0 (+https://example.com)';
-const TOKEN_ENDPOINT = 'https://www.reddit.com/api/v1/access_token';
+const USER_AGENT = process.env.REDDIT_USER_AGENT || 'Mozilla/5.0 (compatible; reddit-client/1.0; +https://example.com)';
+const TOKEN_ENDPOINT = process.env.REDDIT_TOKEN_ENDPOINT || 'https://www.reddit.com/api/v1/access_token';
 const OAUTH_HOST = 'oauth.reddit.com';
 
 let accessToken = null;
 let tokenExpiresAt = 0;
+
+async function getFetch() {
+  if (typeof globalThis.fetch === 'function') {
+    return globalThis.fetch;
+  }
+  const nodeFetch = await import('node-fetch');
+  return nodeFetch.default;
+}
 
 async function getAccessToken() {
   const clientId = process.env.REDDIT_CLIENT_ID;
@@ -19,7 +27,8 @@ async function getAccessToken() {
   }
 
   const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-  const response = await fetch(TOKEN_ENDPOINT, {
+  const fetchFn = await getFetch();
+  const response = await fetchFn(TOKEN_ENDPOINT, {
     method: 'POST',
     headers: {
       Authorization: `Basic ${auth}`,
@@ -42,7 +51,9 @@ async function getAccessToken() {
 
 export async function fetchReddit(path) {
   const authToken = await getAccessToken();
-  const hosts = authToken ? [OAUTH_HOST] : ['api.reddit.com', 'www.reddit.com', 'old.reddit.com'];
+  const hosts = authToken
+    ? [OAUTH_HOST]
+    : ['api.reddit.com', 'www.reddit.com', 'reddit.com', 'old.reddit.com'];
   const headers = {
     'User-Agent': USER_AGENT,
     Accept: 'application/json, text/plain, */*',
@@ -50,17 +61,19 @@ export async function fetchReddit(path) {
     Referer: 'https://www.reddit.com/',
   };
 
+  const fetchFn = await getFetch();
   const tried = [];
   let lastBody = '';
+  const pathWithRawJson = path.includes('?') ? `${path}&raw_json=1` : `${path}?raw_json=1`;
 
   for (const host of hosts) {
-    const url = `https://${host}${path}`;
+    const url = `https://${host}${pathWithRawJson}`;
     const requestHeaders = { ...headers };
     if (host === OAUTH_HOST && authToken) {
       requestHeaders.Authorization = `Bearer ${authToken}`;
     }
 
-    const response = await fetch(url, { headers: requestHeaders });
+    const response = await fetchFn(url, { headers: requestHeaders });
     const body = await response.text();
     tried.push({ url, status: response.status, ok: response.ok });
     lastBody = body;
