@@ -1,0 +1,32 @@
+{
+  "manifest_version": 1,
+  "name": "reddit-client-devvit-capabilities",
+  "version": "0.1.0",
+  "redditAPI": true,
+  "permissions": {
+    "http": {
+      "enable": true,
+      "domains": [
+        "reddit-client-nk.vercel.app",
+        "www.reddit.com",
+        "api.reddit.com",
+        "oauth.reddit.com",
+        "old.reddit.com"
+      ]
+    }
+  },
+  "capabilities": {
+    "http": [
+      {
+        "method": "GET",
+        "path": "/posts",
+        "handler": "devvit/handlers/http/posts.js"
+      },
+      {
+        "method": "GET",
+        "path": "/comments",
+        "handler": "devvit/handlers/http/comments.js"
+      }
+    ]
+  }
+}

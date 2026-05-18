@@ -3,7 +3,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchComments = createAsyncThunk(
   'comments/fetchComments',
   async ({ subreddit, postId }) => {
-    const url = `/api/comments?subreddit=${encodeURIComponent(subreddit)}&postId=${encodeURIComponent(postId)}`;
+    const devvitBase = import.meta.env.VITE_DEVVIT_URL || '';
+    const url = devvitBase
+      ? `${devvitBase.replace(/\/$/, '')}/comments?subreddit=${encodeURIComponent(subreddit)}&postId=${encodeURIComponent(postId)}`
+      : `/api/comments?subreddit=${encodeURIComponent(subreddit)}&postId=${encodeURIComponent(postId)}`;
     const response = await fetch(url);
     if (!response.ok) {
       const text = await response.text();

@@ -4,7 +4,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
-    const url = `/api/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`;
+    const devvitBase = import.meta.env.VITE_DEVVIT_URL || '';
+    const url = devvitBase
+      ? `${devvitBase.replace(/\/$/, '')}/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`
+      : `/api/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`;
     const response = await fetch(url);
     if (!response.ok) {
       const text = await response.text();
