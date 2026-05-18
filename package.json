@@ -2,6 +2,9 @@
   "name": "reddit-client",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "cra-template-redux": "2.0.0",
     "react": "^19.2.6",
