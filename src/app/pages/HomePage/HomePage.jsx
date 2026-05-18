@@ -6,7 +6,8 @@ import Filters from '../../components/Filters/Filters';
 function HomePage() {
   return (
     <main className="container">
-      <h1>Reddit Client</h1>
+      <h1>SayWWWhatNow</h1>
+      <h2>A Reddit-Client App</h2>
       <SearchBar />
       <Filters /> 
       <PostList />

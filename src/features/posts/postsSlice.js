@@ -4,29 +4,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
-    const devvitBase = import.meta.env.VITE_DEVVIT_URL || '';
-    const url = devvitBase
-      ? `${devvitBase.replace(/\/$/, '')}/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`
-      : `/api/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`;
+    const url = `https://www.reddit.com/r/${subreddit}/${sort}.json`;
+
     const response = await fetch(url);
     if (!response.ok) {
-      const text = await response.text();
-      let message = `Failed to fetch posts: ${response.status} ${response.statusText} (${url})`;
-      if (text) {
-        try {
-          const json = JSON.parse(text);
-          if (json.error) message += ` - ${json.error}`;
-          if (json.attempts) message += ` | attempts=${JSON.stringify(json.attempts)}`;
-          if (json.snippet) message += ` | snippet=${JSON.stringify(json.snippet.slice(0, 256))}`;
-        } catch {
-          message += ` - ${text.slice(0, 256)}`;
-        }
-      }
-      throw new Error(message);
+      throw new Error(`Failed to fetch posts: ${response.status}`);
     }
+
     const json = await response.json();
 
-    // Normalize the data into a clean array of posts
     const posts = json.data.children.map((child) => {
       const post = child.data;
       return {

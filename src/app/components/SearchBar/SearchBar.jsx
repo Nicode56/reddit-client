@@ -11,7 +11,7 @@ function SearchBar() {
     e.preventDefault();
 
     dispatch(setSearchTerm(input));
-    dispatch(fetchPosts({ subreddit: 'popular', sort: 'hot', term: input }));
+    dispatch(fetchPosts({ subreddit: 'popular', sort: 'hot' }));
   };
 
   return (
@@ -26,4 +26,4 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default SearchBar
