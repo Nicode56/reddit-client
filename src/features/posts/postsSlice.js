@@ -7,7 +7,19 @@ export const fetchPosts = createAsyncThunk(
     const url = `/api/posts?subreddit=${encodeURIComponent(subreddit)}&sort=${encodeURIComponent(sort)}`;
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText} (${url})`);
+      const text = await response.text();
+      let message = `Failed to fetch posts: ${response.status} ${response.statusText} (${url})`;
+      if (text) {
+        try {
+          const json = JSON.parse(text);
+          if (json.error) message += ` - ${json.error}`;
+          if (json.attempts) message += ` | attempts=${JSON.stringify(json.attempts)}`;
+          if (json.snippet) message += ` | snippet=${JSON.stringify(json.snippet.slice(0, 256))}`;
+        } catch {
+          message += ` - ${text.slice(0, 256)}`;
+        }
+      }
+      throw new Error(message);
     }
     const json = await response.json();
 

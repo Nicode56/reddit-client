@@ -6,7 +6,8 @@ export default async function handler(req, res) {
       res.status(400).json({ error: 'Missing subreddit or postId' });
       return;
     }
-    const url = `https://www.reddit.com/r/${subreddit}/comments/${postId}.json`;
+    const path = `/r/${subreddit}/comments/${postId}.json`;
+    const hosts = ['api.reddit.com', 'www.reddit.com', 'old.reddit.com'];
 
     const headers = {
       'User-Agent': 'reddit-client/1.0 (+https://example.com)',
@@ -15,30 +16,32 @@ export default async function handler(req, res) {
       'Referer': 'https://www.reddit.com/'
     };
 
-    // try www first
-    let response = await fetch(url, { headers });
-    let tried = [{ url, status: response.status }];
+    let tried = [];
+    let lastBody = '';
+    let successfulResponse = null;
 
-    if (!response.ok) {
-      const fallback = url.replace('www.reddit.com', 'old.reddit.com');
-      const fallbackResp = await fetch(fallback, { headers });
-      tried.push({ url: fallback, status: fallbackResp.status });
-      if (fallbackResp.ok) {
-        const body = await fallbackResp.text();
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
-        res.status(fallbackResp.status).send(body);
-        return;
+    for (const host of hosts) {
+      const candidateUrl = `https://${host}${path}`;
+      const response = await fetch(candidateUrl, { headers });
+      tried.push({ url: candidateUrl, status: response.status, ok: response.ok });
+      lastBody = await response.text();
+      if (response.ok) {
+        successfulResponse = { response, body: lastBody };
+        break;
       }
     }
 
-    const body = await response.text();
-    if (response.ok) {
+    if (successfulResponse) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
-      res.status(response.status).send(body);
+      res.status(successfulResponse.response.status).send(successfulResponse.body);
       return;
     }
+
+    const snippet = lastBody ? lastBody.slice(0, 2000) : '';
+    console.error('Reddit proxy failed for comments', { tried, snippet });
+    res.setHeader('Content-Type', 'application/json');
+    res.status(502).json({ error: 'Upstream fetch failed', attempts: tried, snippet });
 
     const snippet = body ? body.slice(0, 2000) : '';
     res.setHeader('Content-Type', 'application/json');

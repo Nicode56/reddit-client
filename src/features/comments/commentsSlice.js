@@ -6,7 +6,19 @@ export const fetchComments = createAsyncThunk(
     const url = `/api/comments?subreddit=${encodeURIComponent(subreddit)}&postId=${encodeURIComponent(postId)}`;
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Failed to fetch comments: ${response.status} ${response.statusText} (${url})`);
+      const text = await response.text();
+      let message = `Failed to fetch comments: ${response.status} ${response.statusText} (${url})`;
+      if (text) {
+        try {
+          const json = JSON.parse(text);
+          if (json.error) message += ` - ${json.error}`;
+          if (json.attempts) message += ` | attempts=${JSON.stringify(json.attempts)}`;
+          if (json.snippet) message += ` | snippet=${JSON.stringify(json.snippet.slice(0, 256))}`;
+        } catch {
+          message += ` - ${text.slice(0, 256)}`;
+        }
+      }
+      throw new Error(message);
     }
     const json = await response.json();
 
