@@ -4,14 +4,20 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async ({ subreddit = 'popular', sort = 'hot' }) => {
-    const url = `https://www.reddit.com/r/${subreddit}/${sort}.json?raw_json=1`;
-// Reddit's API requires a User-Agent header, so we include it in the fetch request
+    const url = `https://reddit-api-proxy.vercel.app/api/r/${subreddit}/${sort}`;
+
+    console.log("FETCH URL:", url);
+
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.status}`);
-    }
+    console.log("FETCH STATUS:", response.status);
 
     const json = await response.json();
+    console.log("FETCH JSON RAW:", json);
+
+    if (!json?.data?.children) {
+      console.error("Invalid Reddit response:", json);
+      return [];
+    }
 
     const posts = json.data.children.map((child) => {
       const post = child.data;
@@ -35,6 +41,7 @@ export const fetchPosts = createAsyncThunk(
     return posts;
   }
 );
+  
 
 const postsSlice = createSlice({
   name: 'posts',

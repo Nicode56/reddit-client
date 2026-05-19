@@ -16,7 +16,7 @@ useEffect(() => {
 }, [subreddit, sort, dispatch]); 
 
   //* Fetch posts on initial load
-  
+  console.log("POSTLIST RENDER", { posts, subreddit, sort, status });
   if (status === 'loading') {
     return <p>Loading posts…</p>;
   }
@@ -28,7 +28,7 @@ useEffect(() => {
   if (!posts || posts.length === 0) {
     return <p>No posts found for r/{subreddit}.</p>;
   }
-
+  
   return (
     <div className="post-list">
       <p>{posts.length} posts</p>
